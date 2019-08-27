@@ -23,11 +23,7 @@ def main():
         else:
             md_file = os.path.basename(cm.name).split(".")[0] + '_metadata.json'
             with open('_data/'+md_file, 'w') as md:
-                md_JSON = {}
-                md_JSON['type'] = "CityJSON"
-                md_JSON['version'] = json_cm['version']
-                md_JSON['metadata'] = full_metadata
-                md.write(json.dumps(md_JSON, indent=2))
+                md.write(json.dumps(full_metadata, indent=2))
             print("Full metadata written to separate file")
 
 def generate_metadata(citymodel,cm_file,cm_file_name):
