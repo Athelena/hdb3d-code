@@ -32,7 +32,7 @@ def generate_metadata(citymodel,cm_name):
     metadata = {
         "citymodelIdentifier": str(uuid.uuid4()),
         "datasetTitle": "3D city model of public housing (HDB) buildings in Singapore",
-        "datasetReferenceDate": str(date.today()),
+        "datasetReferenceDate": "2019-08-25",
         "geographicLocation": "Singapore, Republic of Singapore",
         "datasetLanguage": "English",
         "datasetCharacterSet": "UTF-8",
@@ -88,7 +88,7 @@ def generate_metadata(citymodel,cm_name):
                         "contactType": "organization",
                         "website": "https://ual.sg/"
                         },
-                    "stepDateTime": str(date.today()),
+                    "stepDateTime": "2019-08-25",
                     "reference": "https://github.com/ualsg/hdb3d-code"
                 }
             }],
