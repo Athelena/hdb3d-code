@@ -1,4 +1,5 @@
 #-- generate full metadata for hdb3d-data
+#-- metadata can be written to the parent file or separately
 
 import json
 import uuid
@@ -6,13 +7,26 @@ import os
 from datetime import date
 
 def main():
-    with open('_data/hdbTest.json', 'r+') as cm:
+    #specify if you want the metadata in the file or separately with inFile = True or inFile = False
+    inFile = True
+    with open('_data/hdb.json', 'r+') as cm:
         json_cm = json.load(cm)
-        json_cm['metadata'] = generate_metadata(json_cm, cm)
-        cm.seek(0)
-        cm.write(json.dumps(json_cm, indent=2))
-        cm.truncate()   
-    print("Full metadata written to file")
+        full_metadata = generate_metadata(json_cm, cm)
+        if inFile:
+            json_cm['metadata'] = full_metadata
+            cm.seek(0)
+            cm.write(json.dumps(json_cm, indent=2))
+            cm.truncate()
+            print("Full metadata written to file")
+        else:
+            md_file = os.path.basename(cm.name).split(".")[0] + '_metadata.json'
+            with open('_data/'+md_file, 'w') as md:
+                md_JSON = {}
+                md_JSON['type'] = "CityJSON"
+                md_JSON['version'] = json_cm['version']
+                md_JSON['metadata'] = full_metadata
+                md.write(json.dumps(md_JSON, indent=2))
+            print("Full metadata written to separate file")
 
 def generate_metadata(citymodel,cm_name):
     metadata = {
