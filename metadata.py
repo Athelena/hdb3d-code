@@ -4,14 +4,16 @@
 import json
 import uuid
 import os
-from datetime import date
+import time
+from datetime import date, datetime
 
 def main():
     #specify if you want the metadata in the file or separately with inFile = True or inFile = False
     inFile = True
-    with open('_data/hdb.json', 'r+') as cm:
+    in_cm_name = '_data/hdb.json'
+    with open(inCM, 'r+') as cm:
         json_cm = json.load(cm)
-        full_metadata = generate_metadata(json_cm, cm)
+        full_metadata = generate_metadata(json_cm, cm, in_cm_name)
         if inFile:
             json_cm['metadata'] = full_metadata
             cm.seek(0)
@@ -28,11 +30,11 @@ def main():
                 md.write(json.dumps(md_JSON, indent=2))
             print("Full metadata written to separate file")
 
-def generate_metadata(citymodel,cm_name):
+def generate_metadata(citymodel,cm_file,cm_file_name):
     metadata = {
         "citymodelIdentifier": str(uuid.uuid4()),
         "datasetTitle": "3D city model of public housing (HDB) buildings in Singapore",
-        "datasetReferenceDate": "2019-08-25",
+        "datasetReferenceDate": datetime.fromtimestamp(os.path.getmtime(cm_file_name)).strftime('%Y-%m-%d %H:%M:%S'),
         "geographicLocation": "Singapore, Republic of Singapore",
         "datasetLanguage": "English",
         "datasetCharacterSet": "UTF-8",
@@ -41,7 +43,7 @@ def generate_metadata(citymodel,cm_name):
         "referenceSystem": "urn:ogc:def:crs:EPSG::3414",
         "spatialRepresentationType": "vector",
         "onlineResource": "https://github.com/ualsg/hdb3d-data",
-        "fileIdentifier": os.path.basename(cm_name.name),
+        "fileIdentifier": os.path.basename(cm_file.name),
         "geographicalExtent": [
             11474.615816611371,
             28054.808157231186,
@@ -88,7 +90,7 @@ def generate_metadata(citymodel,cm_name):
                         "contactType": "organization",
                         "website": "https://ual.sg/"
                         },
-                    "stepDateTime": "2019-08-25",
+                    "stepDateTime": datetime.fromtimestamp(os.path.getmtime(cm_file_name)).strftime('%Y-%m-%d %H:%M:%S'),
                     "reference": "https://github.com/ualsg/hdb3d-code"
                 }
             }],
