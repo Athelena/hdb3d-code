@@ -15,20 +15,30 @@ def main():
         json_cm = json.load(cm)
         full_metadata = generate_metadata(json_cm, cm, in_cm_name)
         if inFile:
-            json_cm['metadata'] = full_metadata
+            json_cm['metadata'] = full_metadata[0]
             cm.seek(0)
             cm.write(json.dumps(json_cm, indent=2))
             cm.truncate()
             print("Full metadata written to file")
         else:
+            #check if parent file already has unique id, adds it if missing
+            if not json_cm['metadata'].get("citymodelIdentifier"):
+                json_cm['metadata']["citymodelIdentifier"] = full_metadata[1]
+                cm.seek(0)
+                cm.write(json.dumps(json_cm, indent=2))
+                cm.truncate()
             md_file = os.path.basename(cm.name).split(".")[0] + '_metadata.json'
             with open('_data/'+md_file, 'w') as md:
-                md.write(json.dumps(full_metadata, indent=2))
+                md.write(json.dumps(full_metadata[0], indent=2))
             print("Full metadata written to separate file")
 
 def generate_metadata(citymodel,cm_file,cm_file_name):
+    if not citymodel["metadata"].get("citymodelIdentifier"):
+        unique_id = str(uuid.uuid4())
+    else:
+        unique_id = citymodel["metadata"]["citymodelIdentifier"]
     metadata = {
-        "citymodelIdentifier": str(uuid.uuid4()),
+        "citymodelIdentifier": unique_id,
         "datasetTitle": "3D city model of public housing (HDB) buildings in Singapore",
         "datasetReferenceDate": datetime.fromtimestamp(os.path.getmtime(cm_file_name)).strftime('%Y-%m-%d %H:%M:%S'),
         "geographicLocation": "Singapore, Republic of Singapore",
@@ -129,7 +139,7 @@ def generate_metadata(citymodel,cm_file,cm_file_name):
             }
         }
     }
-    return metadata
+    return metadata, unique_id
 
 if __name__ == '__main__':
     main()
