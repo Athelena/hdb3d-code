@@ -11,7 +11,7 @@ def main():
     #specify if you want the metadata in the file or separately with inFile = True or inFile = False
     inFile = True
     in_cm_name = '_data/hdb.json'
-    with open(inCM, 'r+') as cm:
+    with open(in_cm_name, 'r+') as cm:
         json_cm = json.load(cm)
         full_metadata = generate_metadata(json_cm, cm, in_cm_name)
         if inFile:
