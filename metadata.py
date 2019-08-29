@@ -81,7 +81,7 @@ def generate_metadata(citymodel,cm_file,cm_file_name):
                 "source":[{
                     "description": "2D building footprints from OpenStreetMap",
                     "sourceCitation": "https://www.openstreetmap.org/#map=12/1.3649/103.8229",
-                    "SourceReferenceSystem": "urn:ogc:def:crs:EPSG::4326"
+                    "sourceReferenceSystem": "urn:ogc:def:crs:EPSG::4326"
                     },
                     {
                     "description": "HDB Property Information",
