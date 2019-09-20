@@ -15,7 +15,7 @@ def main():
         json_cm = json.load(cm)
         full_metadata = generate_metadata(json_cm, cm, in_cm_name)
         if inFile:
-            json_cm['metadata'] = full_metadata[0]
+            json_cm['metadata'] = full_metadata
             cm.seek(0)
             cm.write(json.dumps(json_cm, indent=2))
             cm.truncate()
@@ -23,7 +23,7 @@ def main():
         else:
             #check if parent file already has unique id, adds it if missing
             if not json_cm['metadata'].get("citymodelIdentifier"):
-                json_cm['metadata']["citymodelIdentifier"] = full_metadata[1]
+                json_cm['metadata']["citymodelIdentifier"] = full_metadata["citymodelIdentifier"]
                 cm.seek(0)
                 cm.write(json.dumps(json_cm, indent=2))
                 cm.truncate()
@@ -139,7 +139,7 @@ def generate_metadata(citymodel,cm_file,cm_file_name):
             }
         }
     }
-    return metadata, unique_id
+    return metadata
 
 if __name__ == '__main__':
     main()
